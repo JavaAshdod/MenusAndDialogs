@@ -4,4 +4,5 @@
     <string name="hello">Hello</string>
     <string name="log_out">Log Out</string>
     <string name="change_backround">Change Backround</string>
+    <string name="choose_city">בחר עיר</string>
 </resources>

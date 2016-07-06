@@ -28,11 +28,28 @@ public class MainActivity extends AppCompatActivity {
         layout = (RelativeLayout) findViewById(R.id.layout);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                showImagePickerDialog();
+               showListDialog();
+
             }
         });
+
+    }
+    String selectedDay = "";
+    private void showListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", };
+        builder.setTitle(getString(R.string.choose_city));
+        builder.setItems(days, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedDay = days[which];
+                Toast.makeText(MainActivity.this, selectedDay, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
 
     }
 
