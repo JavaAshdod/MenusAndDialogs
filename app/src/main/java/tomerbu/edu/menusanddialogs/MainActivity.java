@@ -1,5 +1,6 @@
 package tomerbu.edu.menusanddialogs;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     RelativeLayout layout;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +33,60 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-               showListDialog();
-
+                showBurgerToppings();
             }
         });
 
     }
+
+    private void showBurgerToppings() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.pick_toppings));
+        final String[] toppings = getResources().getStringArray(R.array.toppings);
+        final boolean[] defaults = new boolean[toppings.length];
+        defaults[0] = true;
+        defaults[1] = true;
+        defaults[2] = true;
+
+        builder.setMultiChoiceItems(toppings, defaults, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                defaults[which] = isChecked;
+            }
+        });
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                for (int i = 0; i < toppings.length; i++) {
+                    Toast.makeText(MainActivity.this, toppings[i] + " " + defaults[i], Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void showProgressDialog() {
+        dialog = new ProgressDialog(this);
+
+        dialog.setTitle("Logging you in...");
+        dialog.setMessage("Please wait");
+
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
     String selectedDay = "";
+
     private void showListDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", };
+
+
         builder.setTitle(getString(R.string.choose_city));
-        builder.setItems(days, new DialogInterface.OnClickListener() {
+        builder.setItems(R.array.days, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedDay = days[which];
+                selectedDay = getResources().getStringArray(R.array.days)[which];
                 Toast.makeText(MainActivity.this, selectedDay, Toast.LENGTH_SHORT).show();
             }
         });
@@ -64,14 +105,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 layout.setBackgroundResource(images[currentIndex]);
                 currentIndex++;
-                if (currentIndex>=images.length){currentIndex = 0;}
+                if (currentIndex >= images.length) {
+                    currentIndex = 0;
+                }
             }
         }).setNegativeButton("<", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 layout.setBackgroundResource(images[currentIndex]);
                 currentIndex--;
-                if (currentIndex < 0){currentIndex = images.length - 1;}
+                if (currentIndex < 0) {
+                    currentIndex = images.length - 1;
+                }
             }
         }).show();
     }
