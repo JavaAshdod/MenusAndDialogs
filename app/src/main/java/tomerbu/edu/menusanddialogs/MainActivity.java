@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,17 +37,39 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                showCustomDialog();
+                showTimePickerDialog();
             }
         });
 
     }
 
+    private void showTimePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        View v = getLayoutInflater().inflate(R.layout.time_picker_dialog, layout, false);
+
+        builder.setView(v);
+
+        final AlertDialog dialog = builder.show();
+
+        final TimePicker picker = (TimePicker) v.findViewById(R.id.timePicker);
+        Button btn = (Button) v.findViewById(R.id.btnSave);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, picker.getCurrentHour() + " Hours " + picker.getCurrentMinute() + " Minutes ", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+    }
+
     private void showCustomDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        
-        View dialogView = getLayoutInflater().inflate(R.layout.rateus_dialog, layout, false);
-        
+
+        View dialogView = getLayoutInflater().
+                inflate(R.layout.rateus_dialog, layout, false);
+
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.show();
@@ -59,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
     }
 
     private void showBurgerToppings() {
