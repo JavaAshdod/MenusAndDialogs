@@ -2,6 +2,7 @@ package tomerbu.edu.menusanddialogs;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                showBurgerToppings();
+                showCustomDialog();
+            }
+        });
+
+    }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        View dialogView = getLayoutInflater().inflate(R.layout.rateus_dialog, layout, false);
+        
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.show();
+
+        RatingBar rb = (RatingBar) dialogView.findViewById(R.id.rateus_bar);
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Toast.makeText(MainActivity.this, rating + " ", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 
@@ -59,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 for (int i = 0; i < toppings.length; i++) {
-                    Toast.makeText(MainActivity.this, toppings[i] + " " + defaults[i], Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, toppings[i] + "  " + defaults[i], Toast.LENGTH_SHORT).show();
                 }
             }
         });
